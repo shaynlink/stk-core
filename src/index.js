@@ -15,25 +15,26 @@ const app = express();
 
 app.use(express.json());
 
+const description = `
+Hello 👋, this project is a preview of the shortlnk project.
+a full version will be released soon.
+this project is open source and you can find it on github.
+is a simple url shortener.\n<br />
+github: https://stk.re/085556
+`;
+
 app.get('/', (req, res) => {
-    return res.status(200).send(`
-        Hello 👋, this project is a preview of the shortlnk project.
-        a full version will be released soon.
-        this project is open source and you can find it on github.
-        is a simple url shortener.
-    `);
+    res.setHeader('Content-Type', 'text/html');
+
+    return res.status(200).send(description);
 })
 
 app.get('/:hash', async (req, res) => {
     const { hash } = req.params;
 
     if (!hash) {
-        return res.status(200).send(`
-            Hello 👋, this project is a preview of the shortlnk project.
-            a full version will be released soon.
-            this project is open source and you can find it on github.
-            is a simple url shortener.
-        `);
+        res.setHeader('Content-Type', 'text/html');
+        return res.status(200).send(description);
     }
 
     if (hash === 'favicon.ico') {
@@ -54,6 +55,7 @@ app.get('/:hash', async (req, res) => {
     if (accept === 'html') {
         res.redirect(301, link.url);
     } else {
+        res.setHeader('Content-Type', 'application/json');
         res.status(200).json({ url: link.url });
     }
 })
@@ -99,7 +101,8 @@ app.post('/', async (req, res) => {
         url,
         _id: result.insertedId,
         createdAt,
-        views: 0
+        views: 0,
+        hash: shortHash
     });
 })
 

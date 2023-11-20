@@ -53,7 +53,7 @@ app.get('/:hash', async (req, res) => {
     const accept = req.accepts(['html', 'json']);
 
     if (accept === 'html') {
-        res.redirect(301, link.url);
+        res.redirect(307, link.url);
     } else {
         res.setHeader('Content-Type', 'application/json');
         res.status(200).json({ url: link.url });
